@@ -2,11 +2,19 @@ import express from "express"
 import router from "./routes/authRoutes.js";
 import dotenv from "dotenv"
 import connect from "./config/db.js";
+import cors from 'cors';
 dotenv.config();
 
 
-const app = express()
+const app = express();
 const port = process.env.PORT;
+
+
+/**middlewares */
+app.use(express.json());
+app.use(cors());
+// app.use(morgan('tiny'));
+app.disable('x-powered-by');
 
 app.get('/', (req, res) => { res.send('Hello World!') });
 
