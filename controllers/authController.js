@@ -70,3 +70,21 @@ export const login = async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export async function getUser(req, res) {
+    const { username } = req.params;
+
+    try {
+        if (!username) return res.status(501).send({ error: "Invalid UserName" });
+
+        const user = await UserModel.findOne({ username });
+
+        if (!user) return res.status(501).send({ error: "Couldn't find the user" });
+
+        const { password, ...rest } = Object.assign({}, user.toJSON());
+
+        return res.status(201).send(rest);
+    } catch (error) {
+        return res.status(500).send({ error: "Internal Server Error" });
+    }
+}
