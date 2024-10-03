@@ -88,3 +88,26 @@ export async function getUser(req, res) {
         return res.status(500).send({ error: "Internal Server Error" });
     }
 }
+
+export const updateUser = async (req, res) => {
+    try {
+        const { userId } = req.user;
+
+        if (!userId) {
+            return res.status(400).send({ error: 'User ID is required!' });
+        }
+
+        const body = req.body;
+
+        let updatedUser = await UserModel.findByIdAndUpdate(userId, body, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+        
+        return res.status(200).send({ message: 'User record updated successfully.', user: updatedUser });
+
+    } catch (error) {
+        return res.status(500).send({ error: 'Internal server error' });
+    }
+}
