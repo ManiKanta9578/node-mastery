@@ -14,3 +14,12 @@ export const Auth = (req, res, next) => {
         return res.status(500).send({ error: 'Internal server error' });
     }
 }
+
+
+export const localVariables = (req, res, next) => {
+    req.app.locals = {
+        OTP: null,
+        resetSession: false,
+    }
+    next();
+};

@@ -1,6 +1,28 @@
 import UserModel from '../models/User.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import otpGenerator from 'otp-generator';
+
+export const verifyUser = async (req, res, next) => {
+    try {
+        const { username } = req.method === 'GET' ? req.query : req.body;
+        if (!username) {
+            return res.status(400).send({ error: 'username is required!' });
+        }
+
+        let user = await UserModel.findOne({ username });
+
+        if (!user) {
+            return res.status(404).send({ error: 'user not found' });
+        }
+
+        req.user = user;
+
+        next();
+    } catch (error) {
+        res.status(500).send({ error: 'Internal server error' });
+    }
+};
 
 export const register = async (req, res) => {
     try {
@@ -104,10 +126,17 @@ export const updateUser = async (req, res) => {
         if (!updatedUser) {
             return res.status(404).send({ error: 'User not found' });
         }
-        
+
         return res.status(200).send({ message: 'User record updated successfully.', user: updatedUser });
 
     } catch (error) {
         return res.status(500).send({ error: 'Internal server error' });
     }
+}
+
+export const generateOTP = async (req, res) => {
+
+    req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
+    res.status(201).send({ code: req.app.locals.OTP });
+
 }

@@ -1,11 +1,17 @@
 import { Router } from "express";
 import * as authController from "../controllers/authController.js";
-import { Auth } from '../middlewares/authMiddleware.js';
+import { Auth, localVariables } from '../middlewares/authMiddleware.js';
 const router = Router();
 
-router.route('/register').post(authController.register);
+//GET
 router.route('/login').get(authController.login);
 router.route('/user/:username').get(authController.getUser);
+router.route('/generateOTP').get(authController.verifyUser, localVariables, authController.generateOTP);
+
+//POST
+router.route('/register').post(authController.register);
+
+//PUT
 router.route('/updateUser').put(Auth, authController.updateUser);
 
 export default router;
