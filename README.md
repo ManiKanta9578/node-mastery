@@ -1,4 +1,4 @@
-# Task Management ♥️
+# Task Management
 
 To run this application:
 
