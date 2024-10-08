@@ -8,6 +8,7 @@ router.route('/login').get(authController.login);
 router.route('/user/:username').get(authController.getUser);
 router.route('/generateOTP').get(authController.verifyUser, localVariables, authController.generateOTP);
 router.route('/verifyOTP').get(authController.verifyOTP);
+router.route('/createResetSession').get(authController.createResetSession);
 
 //POST
 router.route('/register').post(authController.register);
