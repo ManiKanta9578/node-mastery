@@ -140,3 +140,13 @@ export const generateOTP = async (req, res) => {
     res.status(201).send({ code: req.app.locals.OTP });
 
 }
+
+export const verifyOTP = async (req, res) => {
+    const {code} = req.query;
+    if(parseInt(code) === parseInt(req.app.locals.OTP)){
+        req.app.locals.OTP = null;
+        req.app.locals.resetSession = true;
+        return res.status(201).send({Msg: 'Verified Successfully!'});
+    }
+    return res.status(400).send({error:'Invalid OTP'});
+}
