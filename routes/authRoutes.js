@@ -5,7 +5,7 @@ import { registerMail } from "../controllers/mailer.js";
 const router = Router();
 
 //GET
-router.route('/user/:username').get(authController.getUser);
+// router.route('/user/:username').get(authController.getUser);
 router.route('/generateOTP').get(authController.verifyUser, localVariables, authController.generateOTP);
 router.route('/verifyOTP').get(authController.verifyOTP);
 router.route('/createResetSession').get(authController.createResetSession);
