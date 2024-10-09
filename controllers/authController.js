@@ -16,7 +16,7 @@ export const verifyUser = async (req, res, next) => {
             return res.status(404).send({ error: 'user not found' });
         }
 
-        req.user = user;
+        req.username = user;
 
         next();
     } catch (error) {
@@ -157,3 +157,28 @@ export const createResetSession = async (req, res) => {
     }
     return res.status(440).send({ error: 'Session exprired!' });
 }
+
+export const resetPassword = async (req, res) => {
+    try {
+        if (!req.app.locals.resetSession) {
+            return res.status(440).send({ error: "Session expired!" });
+        }
+
+        const { username, password } = req.body;
+
+        const user = await UserModel.findOne({ username });
+
+        if (!user) {
+            return res.status(404).send({ error: "Username not found" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await UserModel.updateOne({ username: user.username }, { password: hashedPassword });
+
+        req.app.locals.resetSession = false;
+        return res.status(201).send({ msg: "Password updated successfully" });
+    } catch (error) {
+        return res.status(500).send({ error: "Internal server error" });
+    }
+};
