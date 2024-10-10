@@ -24,7 +24,7 @@ connect()
   .then(() => {
     try {
       app.listen(port, '0.0.0.0', () => {
-        console.log(`Example app listening on port ${port}`)
+        console.log(`TaskFlow app listening on port ${port}`)
       })
     } catch (error) {
       console.log("Cannot connect to the server");
